@@ -25,14 +25,16 @@ export const Navbar: React.FC<NavbarProps> = ({
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const navItems: { label: string; view: PageView; number: string }[] = [
+  const navItems: { label: string; view: PageView; number: string; isRecruiter?: boolean }[] = [
     { label: 'HOME', view: 'home', number: '00' },
     { label: 'ABOUT', view: 'about', number: '01' },
     { label: 'WORK', view: 'work', number: '02' },
     { label: 'EXPERIENCE', view: 'experience', number: '03' },
     { label: 'SKILLS', view: 'skills', number: '04' },
-    { label: 'SOCIAL', view: 'social', number: '05' },
-    { label: 'CONTACT', view: 'contact', number: '06' },
+    { label: 'CERTIFICATES', view: 'certificates', number: '05' },
+    { label: 'SOCIAL', view: 'social', number: '06' },
+    { label: 'CONTACT', view: 'contact', number: '07' },
+    { label: 'RECRUITER', view: 'recruiter', number: '08', isRecruiter: true },
   ];
 
   const handleItemClick = (view: PageView) => {
@@ -53,32 +55,44 @@ export const Navbar: React.FC<NavbarProps> = ({
         {/* Brand / Name */}
         <button
           onClick={() => handleItemClick('home')}
-          className="group text-left flex items-center gap-3 focus:outline-none"
+          className="group text-left flex items-center gap-2 focus:outline-none cursor-pointer"
         >
           <span className="font-serif-editorial text-xl sm:text-2xl font-semibold tracking-wider text-[#111111] group-hover:text-[#B89047] transition-colors">
             NPR
-          </span>
-          <span className="hidden sm:inline-block text-[11px] font-mono tracking-[0.25em] uppercase text-neutral-400 border-l border-neutral-300 pl-3">
-            NANDAN PRUTHVI RAJ R
           </span>
           <span className="w-1.5 h-1.5 rounded-full bg-[#B89047]" />
         </button>
 
         {/* Desktop Navigation Links */}
-        <nav className="hidden lg:flex items-center gap-8 text-[12px] font-medium tracking-[0.18em]">
+        <nav className="hidden lg:flex items-center gap-6 xl:gap-8 text-[12px] font-medium tracking-[0.16em]">
           {navItems.map((item) => {
             const isActive = activeView === item.view;
             return (
               <button
                 key={item.view}
                 onClick={() => handleItemClick(item.view)}
-                className={`relative py-1.5 transition-colors group focus:outline-none ${
+                className={`relative py-1.5 transition-colors group focus:outline-none cursor-pointer ${
                   isActive ? 'text-[#111111] font-semibold' : 'text-neutral-500 hover:text-[#111111]'
                 }`}
               >
-                <span>{item.label}</span>
-                {isActive && (
-                  <span className="absolute -bottom-1 left-0 right-0 h-[1.5px] bg-[#B89047] transition-all" />
+                {item.isRecruiter ? (
+                  <span
+                    className={`inline-flex items-center gap-1 px-2.5 py-0.5 border transition-all text-[11px] font-mono tracking-widest ${
+                      isActive
+                        ? 'border-[#B89047] bg-[#B89047] text-white'
+                        : 'border-[#B89047]/60 text-[#B89047] hover:border-[#B89047] hover:bg-[#B89047]/10'
+                    }`}
+                  >
+                    <span>RECRUITER</span>
+                    <span className={`w-1 h-1 rounded-full ${isActive ? 'bg-white' : 'bg-[#B89047]'}`} />
+                  </span>
+                ) : (
+                  <>
+                    <span>{item.label}</span>
+                    {isActive && (
+                      <span className="absolute -bottom-1 left-0 right-0 h-[1.5px] bg-[#B89047] transition-all" />
+                    )}
+                  </>
                 )}
               </button>
             );
@@ -88,25 +102,36 @@ export const Navbar: React.FC<NavbarProps> = ({
           <button
             id="nav-resume-btn"
             onClick={onOpenResume}
-            className="ml-2 inline-flex items-center gap-1.5 px-3.5 py-1.5 text-[11px] font-medium tracking-[0.16em] uppercase border border-[#B89047] text-[#111111] hover:bg-[#B89047] hover:text-white transition-all duration-200 focus:outline-none"
+            className="ml-1 inline-flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-medium tracking-[0.16em] uppercase border border-[#B89047] text-[#111111] hover:bg-[#B89047] hover:text-white transition-all duration-200 focus:outline-none cursor-pointer"
           >
             <span>RESUME</span>
             <ArrowUpRight className="w-3 h-3 text-[#B89047] group-hover:text-white" />
           </button>
         </nav>
 
-        {/* Mobile Hamburger Toggle */}
-        <div className="flex items-center gap-3 lg:hidden">
+        {/* Mobile Hamburger Toggle & Quick Recruiter Action */}
+        <div className="flex items-center gap-2.5 lg:hidden">
+          <button
+            id="nav-recruiter-mobile-btn"
+            onClick={() => handleItemClick('recruiter')}
+            className={`px-2 py-1 text-[10px] font-mono tracking-wider border cursor-pointer ${
+              activeView === 'recruiter'
+                ? 'bg-[#B89047] text-white border-[#B89047]'
+                : 'border-[#B89047]/60 text-[#B89047] bg-white'
+            }`}
+          >
+            RECRUITER
+          </button>
           <button
             id="nav-resume-mobile-btn"
             onClick={onOpenResume}
-            className="px-2.5 py-1 text-[10px] font-mono tracking-wider border border-[#B89047] text-[#111111]"
+            className="px-2 py-1 text-[10px] font-mono tracking-wider border border-neutral-300 text-[#111111] cursor-pointer"
           >
             RESUME
           </button>
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 text-[#111111] hover:text-[#B89047] focus:outline-none"
+            className="p-2 text-[#111111] hover:text-[#B89047] focus:outline-none cursor-pointer"
             aria-label="Toggle Navigation Menu"
           >
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}

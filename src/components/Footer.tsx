@@ -2,14 +2,14 @@ import React from 'react';
 import { PageView } from '../types';
 import { PERSONAL_INFO } from '../data/portfolioData';
 import { ArrowUp, ArrowUpRight } from 'lucide-react';
-import { triggerMailto } from '../utils/contactUtils';
 
 interface FooterProps {
   onNavigate: (view: PageView) => void;
   onOpenResume: () => void;
+  onOpenContact?: () => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenResume }) => {
+export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenResume, onOpenContact }) => {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -20,8 +20,10 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenResume }) => {
     { label: 'WORK', view: 'work' },
     { label: 'EXPERIENCE', view: 'experience' },
     { label: 'SKILLS', view: 'skills' },
+    { label: 'CERTIFICATES', view: 'certificates' },
     { label: 'SOCIAL', view: 'social' },
     { label: 'CONTACT', view: 'contact' },
+    { label: 'RECRUITER', view: 'recruiter' },
   ];
 
   return (
@@ -76,6 +78,15 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenResume }) => {
               >
                 RESUME [PDF]
               </button>
+              <button
+                onClick={() => {
+                  onNavigate('admin');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                className="text-left text-neutral-400 hover:text-[#B89047] transition-colors focus:outline-none"
+              >
+                ADMIN
+              </button>
             </div>
           </div>
 
@@ -104,15 +115,15 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenResume }) => {
                   <span>GITHUB</span>
                   <ArrowUpRight className="w-3.5 h-3.5 text-[#B89047] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                 </a>
-                <a
+                <button
                   id="footer-email-link"
-                  href={`mailto:${PERSONAL_INFO.email}`}
-                  onClick={() => triggerMailto(PERSONAL_INFO.email, 'Portfolio Inquiry')}
-                  className="flex items-center justify-between text-neutral-600 hover:text-[#111111] transition-colors group"
+                  type="button"
+                  onClick={onOpenContact || (() => onNavigate('contact'))}
+                  className="w-full flex items-center justify-between text-neutral-600 hover:text-[#111111] transition-colors group text-left cursor-pointer"
                 >
                   <span>{PERSONAL_INFO.email}</span>
                   <ArrowUpRight className="w-3.5 h-3.5 text-[#B89047] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                </a>
+                </button>
               </div>
             </div>
 
@@ -128,10 +139,16 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenResume }) => {
           </div>
         </div>
 
+        {/* Subtle Final Gold Accent Line */}
+        <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-[#B89047]/50 to-transparent mt-12 mb-8 origin-left transition-all" />
+
         {/* Bottom Bar */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-neutral-400">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-neutral-400">
           <div>
             © 2026 NANDAN PRUTHVI RAJ R. ALL RIGHTS RESERVED.
+          </div>
+          <div className="flex items-center gap-4 text-[11px]">
+            <span>SOFTWARE ENGINEER // DATA ANALYST</span>
           </div>
         </div>
       </div>

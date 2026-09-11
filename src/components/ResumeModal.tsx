@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { X, Download, ArrowUpRight, Check, ZoomIn, ZoomOut, RotateCcw, Maximize2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { usePortfolio } from '../hooks/usePortfolio';
 
 interface ResumeModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-type ResumeVersion = 'swe' | 'da';
+type ResumeVersion = 'overall' | 'swe' | 'da';
 
 interface ResumeOption {
   id: ResumeVersion;
@@ -20,17 +21,25 @@ interface ResumeOption {
 
 const RESUME_OPTIONS: ResumeOption[] = [
   {
+    id: 'overall',
+    label: 'OVERALL RESUME',
+    subLabel: 'Master Comprehensive Profile',
+    path: '/resume.pdf',
+    previewImage: '/resume-page-overall.png',
+    downloadFilename: 'Nandan_Pruthvi_Raj_Resume.pdf',
+  },
+  {
     id: 'swe',
     label: 'SOFTWARE ENGINEER',
-    subLabel: 'Full-Stack & AI Systems',
-    path: '/resume.pdf',
+    subLabel: 'Full-Stack & Systems Focus',
+    path: '/resume-software-engineer.pdf',
     previewImage: '/resume-page-swe.png',
     downloadFilename: 'Nandan_Pruthvi_Raj_Software_Engineer_Resume.pdf',
   },
   {
     id: 'da',
     label: 'DATA ANALYST',
-    subLabel: 'BI & Data Modeling',
+    subLabel: 'Data & Analytics Focus',
     path: '/resume-data-analyst.pdf',
     previewImage: '/resume-page-da.png',
     downloadFilename: 'Nandan_Pruthvi_Raj_Data_Analyst_Resume.pdf',
@@ -38,7 +47,7 @@ const RESUME_OPTIONS: ResumeOption[] = [
 ];
 
 export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => {
-  const [selectedVersion, setSelectedVersion] = useState<ResumeVersion>('swe');
+  const [selectedVersion, setSelectedVersion] = useState<ResumeVersion>('overall');
   const [zoomLevel, setZoomLevel] = useState<number>(100);
   const [downloadSuccess, setDownloadSuccess] = useState(false);
 
@@ -58,7 +67,13 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => 
     };
   }, [isOpen, onClose]);
 
-  const currentResume = RESUME_OPTIONS.find((r) => r.id === selectedVersion) || RESUME_OPTIONS[0];
+  const { resumeInfo } = usePortfolio();
+  const baseResume = RESUME_OPTIONS.find((r) => r.id === selectedVersion) || RESUME_OPTIONS[0];
+  const currentResume = {
+    ...baseResume,
+    path: (selectedVersion === 'overall' && resumeInfo?.isActive && resumeInfo?.fileUrl) ? resumeInfo.fileUrl : baseResume.path,
+    downloadFilename: (selectedVersion === 'overall' && resumeInfo?.isActive && resumeInfo?.fileName) ? resumeInfo.fileName : baseResume.downloadFilename,
+  };
 
   const triggerDownload = async (e?: React.MouseEvent) => {
     if (e) e.preventDefault();

@@ -1,18 +1,43 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { PageView, ProjectItem } from '../types';
 import { PERSONAL_INFO, PROJECTS } from '../data/portfolioData';
+import { usePortfolio } from '../hooks/usePortfolio';
 import { ArrowDown, ArrowUpRight, ArrowRight, Mail } from 'lucide-react';
-import { triggerMailto } from '../utils/contactUtils';
+import { motion } from 'motion/react';
 
 interface HomeViewProps {
   onNavigate: (view: PageView) => void;
   onSelectProject: (project: ProjectItem) => void;
   onOpenResume?: () => void;
+  onOpenContact?: () => void;
 }
 
-export const HomeView: React.FC<HomeViewProps> = ({ onNavigate, onSelectProject, onOpenResume }) => {
-  // Highlight Skinmatics and Aura Shop for the cinematic preview
-  const featuredProjects = PROJECTS.slice(0, 2);
+export const HomeView: React.FC<HomeViewProps> = ({
+  onNavigate,
+  onSelectProject,
+  onOpenResume,
+  onOpenContact,
+}) => {
+  const { profile, homepage, projects } = usePortfolio();
+
+  // Highlight featured projects for the cinematic preview
+  const featuredProjects = (projects && projects.length > 0)
+    ? projects.filter((p) => p.isFeatured).slice(0, 2)
+    : PROJECTS.slice(0, 2);
+
+  // Subtle hero coordinate micro-interaction
+  const [mouseOffset, setMouseOffset] = useState({ x: 0, y: 0 });
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    setMouseOffset({ x: x * 8, y: y * 6 });
+  };
+
+  const handleMouseLeave = () => {
+    setMouseOffset({ x: 0, y: 0 });
+  };
 
   const scrollToWhoIAm = () => {
     const el = document.getElementById('who-i-am');
@@ -21,72 +46,122 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate, onSelectProject,
     }
   };
 
-  const handleHeroEmailClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    // Ensure email client triggers reliably
-    triggerMailto(PERSONAL_INFO.email, 'Portfolio Inquiry — Software Engineer / Data Analyst');
-  };
+  const heroAvailability = homepage?.availabilityLabel || profile?.availabilityText || `${profile?.availability || PERSONAL_INFO.availability} • ${profile?.location || PERSONAL_INFO.location}`.toUpperCase();
+  const heroName = homepage?.heroName || profile?.name || PERSONAL_INFO.name;
+  const primaryTitle = profile?.primaryTitle || PERSONAL_INFO.primaryTitle;
+  const secondaryTitle = profile?.secondaryTitle || PERSONAL_INFO.secondaryTitle;
+  const heroTagline = homepage?.heroDescription || "Building intelligent digital products, full-stack systems, and data-driven solutions.";
+  const candidateBio = profile?.shortBio || PERSONAL_INFO.shortBio;
 
   return (
     <div className="w-full">
-      {/* 1. HERO — Clean, Centered Layout with Balanced Spacing */}
-      <section className="relative min-h-[82vh] flex flex-col items-center justify-center text-center px-6 sm:px-8 lg:px-12 pt-24 sm:pt-28 pb-10">
-        <div className="max-w-4xl mx-auto space-y-6">
-          {/* Large Name */}
-          <h1 className="font-serif-editorial text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-normal text-[#111111] tracking-tight leading-[1.05]">
-            NANDAN PRUTHVI RAJ R
-          </h1>
+      {/* 1. HERO — Clean, Centered Layout with Balanced Spacing & Timed Sequence */}
+      <section
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+        className="relative min-h-[82vh] flex flex-col items-center justify-center text-center px-6 sm:px-8 lg:px-12 pt-24 sm:pt-28 pb-10 overflow-hidden"
+      >
+        <div className="max-w-4xl mx-auto space-y-6 relative z-10">
+          {/* Step 3: Availability / Status Label */}
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+            className="inline-flex items-center gap-2 px-3 py-1 border border-neutral-200/90 bg-white/80 text-[10px] sm:text-[11px] font-mono tracking-[0.22em] uppercase text-neutral-600"
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            <span>{heroAvailability}</span>
+          </motion.div>
 
-          {/* Professional Title with subtle gold accent line */}
-          <div className="flex items-center justify-center gap-4 pt-1">
+          {/* Step 4: Large Name with subtle micro-offset tracking */}
+          <motion.div
+            style={{
+              transform: `translate3d(${mouseOffset.x * 0.4}px, ${mouseOffset.y * 0.4}px, 0)`,
+              transition: 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+            }}
+          >
+            <motion.h1
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
+              className="font-serif-editorial text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-normal text-[#111111] tracking-tight leading-[1.05]"
+            >
+              {heroName}
+            </motion.h1>
+          </motion.div>
+
+          {/* Step 5: Professional Title with subtle gold accent line */}
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
+            className="flex items-center justify-center gap-4 pt-1"
+          >
             <span className="hidden sm:block w-8 h-[1px] bg-[#B89047]/50" />
             <p className="text-sm sm:text-base md:text-lg font-medium tracking-[0.2em] uppercase text-neutral-600">
-              Software Engineer <span className="text-[#B89047]">/</span> Data Analyst
+              {primaryTitle} <span className="text-[#B89047]">/</span> {secondaryTitle}
             </p>
             <span className="hidden sm:block w-8 h-[1px] bg-[#B89047]/50" />
-          </div>
+          </motion.div>
 
-          {/* Short Statement */}
-          <p className="text-base sm:text-lg md:text-xl text-neutral-600 font-light max-w-2xl mx-auto leading-relaxed pt-1">
-            Building intelligent digital products, full-stack systems, and data-driven solutions.
-          </p>
+          {/* Step 6: Short Statement */}
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.55, ease: [0.16, 1, 0.3, 1] }}
+            className="text-base sm:text-lg md:text-xl text-neutral-600 font-light max-w-2xl mx-auto leading-relaxed pt-1"
+          >
+            {heroTagline}
+          </motion.p>
 
-          {/* Primary Action Buttons: EMAIL ME & RESUME (Below Name & Details) */}
-          <div className="pt-2 flex flex-wrap items-center justify-center gap-4">
-            <a
+          {/* Step 7: Primary Action Buttons: EMAIL ME & RESUME */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.7, ease: [0.16, 1, 0.3, 1] }}
+            className="pt-2 flex flex-wrap items-center justify-center gap-4"
+          >
+            <button
               id="hero-email-me-btn"
-              href={`mailto:${PERSONAL_INFO.email}`}
-              onClick={handleHeroEmailClick}
-              className="inline-flex items-center gap-2 px-6 py-3 text-xs font-semibold tracking-[0.18em] uppercase bg-[#111111] text-white hover:bg-[#B89047] transition-all duration-200 shadow-xs"
+              type="button"
+              onClick={onOpenContact || (() => onNavigate('contact'))}
+              className="inline-flex items-center gap-2 px-6 py-3 text-xs font-semibold tracking-[0.18em] uppercase bg-[#111111] text-white hover:bg-[#B89047] transition-all duration-200 shadow-xs cursor-pointer active:scale-[0.99]"
             >
               <Mail className="w-3.5 h-3.5" />
               <span>EMAIL ME</span>
-            </a>
+            </button>
 
             {onOpenResume && (
               <button
                 id="hero-view-resume-btn"
+                type="button"
                 onClick={onOpenResume}
-                className="inline-flex items-center gap-2 px-6 py-3 text-xs font-semibold tracking-[0.18em] uppercase border border-neutral-300 text-neutral-800 hover:border-[#B89047] hover:text-[#111111] transition-all duration-200 bg-white shadow-xs"
+                className="inline-flex items-center gap-2 px-6 py-3 text-xs font-semibold tracking-[0.18em] uppercase border border-neutral-300 text-neutral-800 hover:border-[#B89047] hover:text-[#111111] transition-all duration-200 bg-white shadow-xs cursor-pointer active:scale-[0.99]"
               >
                 <span>VIEW RESUME</span>
                 <ArrowUpRight className="w-3.5 h-3.5 text-[#B89047]" />
               </button>
             )}
-          </div>
+          </motion.div>
         </div>
 
-        {/* Scroll Indicator — Non-overlapping flow position */}
-        <div className="mt-8 sm:mt-12 flex flex-col items-center gap-2 pb-2">
+        {/* Step 8: Scroll Indicator — Subtle, Calm, Non-bouncing */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.85, ease: 'easeOut' }}
+          className="mt-8 sm:mt-12 flex flex-col items-center gap-2 pb-2 relative z-10"
+        >
           <button
             onClick={scrollToWhoIAm}
-            className="group flex flex-col items-center gap-2 text-[11px] font-mono tracking-[0.25em] uppercase text-neutral-400 hover:text-[#111111] transition-colors focus:outline-none"
+            className="group flex flex-col items-center gap-2 text-[11px] font-mono tracking-[0.25em] uppercase text-neutral-400 hover:text-[#111111] transition-colors focus:outline-none cursor-pointer"
           >
             <span>SCROLL TO EXPLORE</span>
             <div className="w-6 h-6 rounded-full border border-neutral-300 flex items-center justify-center group-hover:border-[#B89047] transition-colors">
-              <ArrowDown className="w-3 h-3 text-neutral-500 group-hover:text-[#B89047] animate-bounce" />
+              <ArrowDown className="w-3 h-3 text-neutral-500 group-hover:text-[#B89047] transition-transform duration-300 group-hover:translate-y-0.5" />
             </div>
           </button>
-        </div>
+        </motion.div>
       </section>
 
       {/* 2. "WHO I AM" — Large Editorial Statement with Abundant Whitespace */}
@@ -106,7 +181,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate, onSelectProject,
                 CANDIDATE PROFILE
               </span>
               <p className="text-xl sm:text-2xl font-serif-editorial text-[#111111] leading-snug">
-                Computer Science graduate from Cambridge Institute of Technology (CGPA 8.0/10) bridging rigorous software engineering with quantitative business intelligence.
+                {candidateBio}
               </p>
             </div>
 

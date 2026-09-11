@@ -1,5 +1,6 @@
 import React from 'react';
-import { PERSONAL_INFO, EDUCATION, CERTIFICATIONS } from '../data/portfolioData';
+import { usePortfolio } from '../hooks/usePortfolio';
+import { EDUCATION as FALLBACK_EDUCATION, CERTIFICATIONS as FALLBACK_CERTIFICATIONS } from '../data/portfolioData';
 import { Check, GraduationCap, Award, BookOpen, ArrowUpRight } from 'lucide-react';
 import { PageView } from '../types';
 
@@ -9,6 +10,10 @@ interface AboutViewProps {
 }
 
 export const AboutView: React.FC<AboutViewProps> = ({ onNavigate, onOpenResume }) => {
+  const { education, certifications, about, profile } = usePortfolio();
+  const activeEducation = education && education.degree ? education : FALLBACK_EDUCATION;
+  const activeCerts = certifications && certifications.length > 0 ? certifications : FALLBACK_CERTIFICATIONS;
+
   return (
     <div className="w-full pt-28 pb-24">
       <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
@@ -18,10 +23,11 @@ export const AboutView: React.FC<AboutViewProps> = ({ onNavigate, onOpenResume }
             ABOUT // BACKGROUND & PERSPECTIVE
           </span>
           <h1 className="font-serif-editorial text-4xl sm:text-6xl md:text-7xl font-normal text-[#111111] tracking-tight">
-            Who I Am & What I Build
+            {about?.heading || 'Who I Am & What I Build'}
           </h1>
           <p className="text-base sm:text-lg text-neutral-500 font-light mt-4 max-w-2xl leading-relaxed">
-            A disciplined Computer Science Engineer focused on building robust full-stack software, automated data pipelines, and intelligent AI-augmented digital products.
+            {about?.subheading ||
+              'A disciplined Computer Science Engineer focused on building robust full-stack software, automated data pipelines, and intelligent AI-augmented digital products.'}
           </p>
         </div>
 
@@ -39,14 +45,14 @@ export const AboutView: React.FC<AboutViewProps> = ({ onNavigate, onOpenResume }
                 CURRENT STANDING
               </div>
               <p className="text-sm font-medium text-[#111111]">
-                {EDUCATION.degree}
+                {activeEducation.degree}
               </p>
               <p className="text-xs text-neutral-500 font-mono">
-                {EDUCATION.institution} • CGPA {EDUCATION.cgpa}
+                {activeEducation.institution} • CGPA {activeEducation.cgpa}
               </p>
               <div className="pt-2">
                 <span className="inline-block px-2.5 py-0.5 text-[10px] font-mono text-[#B89047] border border-[#B89047]/40 bg-[#B89047]/5">
-                  IMMEDIATE JOINER • BENGALURU
+                  IMMEDIATE JOINER • {profile?.location || 'BENGALURU'}
                 </span>
               </div>
             </div>
@@ -54,16 +60,19 @@ export const AboutView: React.FC<AboutViewProps> = ({ onNavigate, onOpenResume }
 
           <div className="lg:col-span-8 space-y-6 text-neutral-600 text-sm sm:text-base leading-relaxed font-light">
             <p className="text-lg sm:text-xl font-serif-editorial text-[#111111] leading-relaxed">
-              I view software engineering not as an isolated discipline of code writing, but as a systematic methodology to eliminate friction in human work and business operations.
+              {about?.narrativeP1 ||
+                'I view software engineering not as an isolated discipline of code writing, but as a systematic methodology to eliminate friction in human work and business operations.'}
             </p>
             <p>
-              During my academic tenure at Cambridge Institute of Technology and across industry internships, I observed that the greatest leverage occurs when developers understand both the full-stack architecture of user interfaces and the underlying data lifecycle—from ingestion and relational modeling to executive reporting.
+              {about?.narrativeP2 ||
+                'During my academic tenure at Cambridge Institute of Technology and across industry internships, I observed that the greatest leverage occurs when developers understand both the full-stack architecture of user interfaces and the underlying data lifecycle—from ingestion and relational modeling to executive reporting.'}
             </p>
             <p>
-              At <strong>1Stop.ai</strong>, I engineered backend request pipelines, structured MySQL schemas, and implemented administrative CRUD workflows that prioritized reliable session management. At <strong>MindMatrix</strong>, I translated interface specifications into native Android views while integrating Generative AI tooling into developer velocity workflows.
+              {about?.narrativeP3 ||
+                'At 1Stop.ai, I engineered backend request pipelines, structured MySQL schemas, and implemented administrative CRUD workflows that prioritized reliable session management. At MindMatrix, I translated interface specifications into native Android views while integrating Generative AI tooling into developer velocity workflows.'}
             </p>
             <p>
-              Whether deploying web platforms like <em>Skinmatics</em>, integrating Google Gemini into conversational commerce with <em>Aura Shop</em>, or modeling workforce analytics in Power BI, I build with restraint, modularity, and relentless attention to architectural detail.
+              Whether deploying web platforms like <em>Skinmatics</em>, engineering cloud-based file management systems with <em>CloudVault</em>, or modeling workforce analytics in Power BI and automated Excel dashboards, I build with restraint, modularity, and relentless attention to architectural detail.
             </p>
 
             <div className="pt-4 flex flex-wrap items-center gap-6">
@@ -121,7 +130,7 @@ export const AboutView: React.FC<AboutViewProps> = ({ onNavigate, onOpenResume }
                 </div>
               </div>
               <div className="pt-6 border-t border-neutral-100 text-[11px] font-mono text-neutral-400">
-                PROVEN IN: SKINMATICS, AURA SHOP, 1STOP.AI
+                PROVEN IN: SKINMATICS, CLOUDVAULT, 1STOP.AI
               </div>
             </div>
 
@@ -167,7 +176,7 @@ export const AboutView: React.FC<AboutViewProps> = ({ onNavigate, onOpenResume }
                   AI INTEGRATION
                 </h3>
                 <p className="text-xs sm:text-sm text-neutral-600 leading-relaxed font-light mb-6">
-                  Google Gemini API, conversational chatbots, prompt engineering, and GenAI-assisted developer velocity workflows.
+                  Google Gemini API, conversational workflows, prompt engineering, and GenAI-assisted developer velocity workflows.
                 </p>
                 <div className="space-y-2 border-t border-neutral-100 pt-4 text-xs text-neutral-500 font-mono">
                   <div className="flex items-center gap-2">
@@ -185,7 +194,7 @@ export const AboutView: React.FC<AboutViewProps> = ({ onNavigate, onOpenResume }
                 </div>
               </div>
               <div className="pt-6 border-t border-neutral-100 text-[11px] font-mono text-neutral-400">
-                PROVEN IN: AURA SHOP & MINDMATRIX
+                PROVEN IN: MINDMATRIX & ANTHROPIC CLAUDE 101
               </div>
             </div>
           </div>
@@ -206,12 +215,12 @@ export const AboutView: React.FC<AboutViewProps> = ({ onNavigate, onOpenResume }
               <div className="w-10 h-10 border border-[#B89047]/50 flex items-center justify-center text-[#B89047] mb-6">
                 <GraduationCap className="w-5 h-5" />
               </div>
-              <span className="text-xs font-mono text-neutral-400">{EDUCATION.period}</span>
+              <span className="text-xs font-mono text-neutral-400">{activeEducation.period}</span>
               <h3 className="font-serif-editorial text-2xl text-[#111111] mt-2 mb-1">
-                {EDUCATION.degree}
+                {activeEducation.degree}
               </h3>
               <p className="text-sm font-medium text-neutral-700">
-                {EDUCATION.institution}, {EDUCATION.location}
+                {activeEducation.institution}, {activeEducation.location}
               </p>
 
               <div className="my-6 p-4 border border-neutral-100 bg-[#FAFAFA] flex items-center justify-between">
@@ -220,7 +229,7 @@ export const AboutView: React.FC<AboutViewProps> = ({ onNavigate, onOpenResume }
                   <span className="text-xs text-neutral-400 font-mono">Class of 2026</span>
                 </div>
                 <div className="text-2xl font-serif-editorial text-[#B89047] font-semibold">
-                  {EDUCATION.cgpa}
+                  {activeEducation.cgpa}
                 </div>
               </div>
 
@@ -229,7 +238,7 @@ export const AboutView: React.FC<AboutViewProps> = ({ onNavigate, onOpenResume }
                   KEY COURSEWORK
                 </span>
                 <div className="flex flex-wrap gap-1.5">
-                  {EDUCATION.coursework.map((course) => (
+                  {(activeEducation.coursework || []).map((course) => (
                     <span
                       key={course}
                       className="text-[11px] font-mono text-neutral-600 px-2 py-0.5 border border-neutral-200 bg-white"
@@ -251,10 +260,10 @@ export const AboutView: React.FC<AboutViewProps> = ({ onNavigate, onOpenResume }
             {/* Verified Certifications */}
             <div className="lg:col-span-7 space-y-4">
               <span className="text-[11px] font-mono tracking-[0.25em] uppercase text-neutral-400 block mb-2">
-                VERIFIED CREDENTIALS ({CERTIFICATIONS.length})
+                VERIFIED CREDENTIALS ({activeCerts.length})
               </span>
 
-              {CERTIFICATIONS.map((cert) => (
+              {activeCerts.map((cert) => (
                 <div
                   key={cert.id}
                   className="p-6 border border-neutral-200 bg-white hover:border-[#B89047] transition-colors"

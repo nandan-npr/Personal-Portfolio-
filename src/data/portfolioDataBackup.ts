@@ -1,6 +1,12 @@
+// ==============================================================================
+// CRITICAL BACKUP: COMPLETE PORTFOLIO DATA SNAPSHOT
+// Created at: 2026-09-09
+// Preserved untouched before Supabase migration & CMS integration.
+// ==============================================================================
+
 import { ProjectItem, ExperienceItem, SkillCategory, CertificationItem, EducationItem } from '../types';
 
-export const PERSONAL_INFO = {
+export const BACKUP_PERSONAL_INFO = {
   name: "Nandan Pruthvi Raj R",
   preferredName: "Nandan Pruthvi",
   primaryTitle: "Software Engineer & Data Analyst",
@@ -12,6 +18,8 @@ export const PERSONAL_INFO = {
   linkedin: "https://www.linkedin.com/in/nandan01/",
   github: "https://github.com/nandan-npr",
   availability: "Immediate Joiner",
+  availabilityStatus: "available" as const, // 'available' | 'unavailable'
+  availabilityText: "AVAILABLE FOR ROLES & CONTRACTS • BENGALURU",
   valueProposition: "Adaptable and motivated Computer Science Engineer combining full-stack development, database architecture, workflow coordination, and data analytics with React, Node.js, Python, SQL, and Power BI.",
   shortBio: "Computer Science Engineering graduate from Cambridge Institute of Technology (CGPA 8.0/10) with hands-on experience building full-stack web applications, backend services, Android development workflows (MindMatrix), and database-driven application development (1Stop.ai). Proven track record in problem solving, process tracking, and business intelligence.",
   dsaSolved: "HackerRank Certified Software Engineer",
@@ -19,7 +27,60 @@ export const PERSONAL_INFO = {
   cgpa: "8.0 / 10.0"
 };
 
-export const PROJECTS: ProjectItem[] = [
+export const BACKUP_HOMEPAGE_CONTENT = {
+  heroName: "NANDAN PRUTHVI RAJ R",
+  heroTitle: "Software Engineer / Data Analyst",
+  heroDescription: "Building intelligent digital products, full-stack systems, and data-driven solutions.",
+  availabilityLabel: "AVAILABLE FOR ROLES & CONTRACTS • BENGALURU",
+  whoIAmEyebrow: "01 // CORE PERSPECTIVE",
+  whoIAmHeading: "Engineered with rigor. Decided with data. Designed with discipline.",
+  whoIAmP1: "I am a Computer Science Engineer and Data Analyst with a rigorous foundation in software architecture, full-stack web engineering, algorithmic problem solving, and analytical data modeling.",
+  whoIAmP2: "My background unites deep technical execution—from scalable React interfaces and Node.js REST services to structured relational database schemas and Power BI reporting suites. I approach development through systematic planning, structured execution, and verifiable quality.",
+  quoteText: "Delivering software and analytics where code clarity, performance benchmarks, and measurable business outcomes align effortlessly.",
+  quoteAuthor: "Nandan Pruthvi Raj R",
+  quoteTitle: "Software Engineer & Data Analyst"
+};
+
+export const BACKUP_ABOUT_CONTENT = {
+  heading: "SYSTEMATIC PERSPECTIVE",
+  subheading: "An engineering mindset anchored by architectural precision, full-stack accountability, and quantitative analysis.",
+  narrativeP1: "Graduated with a Bachelor of Engineering in Computer Science and Engineering from Cambridge Institute of Technology (CGPA 8.0/10.0). My background bridges end-to-end software development with structured quantitative analytics.",
+  narrativeP2: "Through practical industry experience at MindMatrix Organisation (Android app workflows, Kotlin, task planning, and Generative AI acceleration) and 1Stop.ai (backend CRUD modules, SQL queries, RESTful APIs, and data integrity verification), I have cultivated a disciplined methodology for designing systems that scale reliably.",
+  narrativeP3: "Whether architecting full-stack web platforms like Skinmatics and CloudVault, or engineering decision-grade analytics suites like the HR and Sales Dashboards, my objective is clear: build performant, maintainable software and translate complex datasets into immediate, high-confidence executive clarity."
+};
+
+export const BACKUP_RECRUITER_CONTENT = {
+  heroHeadline: "EXECUTIVE RECRUITER DOSSIER",
+  heroSubtitle: "Verified candidate summary, technical competencies, career timeline, and contact pathways for hiring managers and talent acquisition leaders.",
+  summary: "Computer Science Engineering graduate (CGPA 8.0/10.0) with verified software engineering credentials, two industry internships (Android & Backend), and four deployed production/analytics applications.",
+  preferredRoles: [
+    "Software Engineer (Full-Stack / Frontend / Backend)",
+    "Data Analyst / Business Intelligence Engineer",
+    "Junior Associate Engineer / Graduate Engineer Trainee",
+    "SQL / Database / Power BI Analyst"
+  ],
+  workAuthorization: "Citizen of India • Available for immediate relocation or remote engagement",
+  availabilityTimeline: "Immediate (0 Days Notice)"
+};
+
+export const BACKUP_SEO_SETTINGS = {
+  siteTitle: "Nandan Pruthvi Raj R — Software Engineer & Data Analyst",
+  metaDescription: "Professional portfolio of Nandan Pruthvi Raj R — Software Engineer & Data Analyst specializing in full-stack web applications, AI integration, and business data analytics.",
+  keywords: "Nandan Pruthvi Raj R, Software Engineer Bengaluru, Data Analyst Bengaluru, Full Stack Developer, React, Node.js, Python, SQL, Power BI, Cambridge Institute of Technology",
+  authorName: "Nandan Pruthvi Raj R",
+  ogTitle: "Nandan Pruthvi Raj R — Software Engineer & Data Analyst",
+  ogDescription: "Building intelligent digital products, full-stack systems, and data-driven solutions.",
+  canonicalUrl: "https://ais-dev-dalsslbnvw4h3sbelgqkeb-463187571582.asia-southeast1.run.app/"
+};
+
+export const BACKUP_RESUME_INFO = {
+  fileName: "NANDAN_PRUTHVI_RAJ_R_RESUME_2026.pdf",
+  fileUrl: "/NANDAN_PRUTHVI_RAJ_R_RESUME_2026.pdf",
+  updatedAt: "2026-09-09",
+  isActive: true
+};
+
+export const BACKUP_PROJECTS: ProjectItem[] = [
   {
     id: "skinmatics",
     title: "Skinmatics",
@@ -129,7 +190,7 @@ export const PROJECTS: ProjectItem[] = [
   }
 ];
 
-export const EXPERIENCES: ExperienceItem[] = [
+export const BACKUP_EXPERIENCES: ExperienceItem[] = [
   {
     id: "mindmatrix",
     company: "MindMatrix Organisation",
@@ -169,7 +230,7 @@ export const EXPERIENCES: ExperienceItem[] = [
   }
 ];
 
-export const SKILL_CATEGORIES: SkillCategory[] = [
+export const BACKUP_SKILL_CATEGORIES: SkillCategory[] = [
   {
     id: "technical",
     name: "Technical & Development",
@@ -232,7 +293,7 @@ export const SKILL_CATEGORIES: SkillCategory[] = [
   }
 ];
 
-export const CERTIFICATIONS: CertificationItem[] = [
+export const BACKUP_CERTIFICATIONS: CertificationItem[] = [
   {
     id: "hackerrank-swe",
     name: "Software Engineer Certification",
@@ -295,7 +356,7 @@ export const CERTIFICATIONS: CertificationItem[] = [
   }
 ];
 
-export const EDUCATION: EducationItem = {
+export const BACKUP_EDUCATION: EducationItem = {
   degree: "Bachelor of Engineering (B.E.) in Computer Science and Engineering",
   institution: "Cambridge Institute of Technology",
   location: "Bengaluru, Karnataka, India",
@@ -313,9 +374,9 @@ export const EDUCATION: EducationItem = {
   ]
 };
 
-export const HIGHLIGHT_METRICS = [
-  { label: "B.E. Computer Science", value: "8.0", sub: "CGPA at Cambridge Inst. of Tech" },
-  { label: "HackerRank Certified", value: "SWE", sub: "Software Engineer Certification" },
-  { label: "Production & Analytics Systems", value: "4", sub: "Full-Stack Apps & BI Dashboards" },
-  { label: "Industry Internships", value: "2", sub: "Android (MindMatrix) & Backend (1Stop.ai)" }
+export const BACKUP_SOCIAL_LINKS = [
+  { id: "linkedin", platform: "LinkedIn", label: "LINKEDIN", url: "https://www.linkedin.com/in/nandan01/", enabled: true, isEnabled: true, sortOrder: 1 },
+  { id: "github", platform: "GitHub", label: "GITHUB", url: "https://github.com/nandan-npr", enabled: true, isEnabled: true, sortOrder: 2 },
+  { id: "email", platform: "Email", label: "EMAIL", url: "mailto:nandanpruthvi1@gmail.com", enabled: true, isEnabled: true, sortOrder: 3 },
+  { id: "phone", platform: "Phone", label: "PHONE", url: "tel:+916362191396", enabled: true, isEnabled: true, sortOrder: 4 }
 ];

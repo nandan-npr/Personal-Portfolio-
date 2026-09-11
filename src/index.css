@@ -59,6 +59,11 @@
   border-color: rgba(184, 144, 71, 0.35);
 }
 
+@keyframes loadingBar {
+  0% { transform: scaleX(0); }
+  100% { transform: scaleX(1); }
+}
+
 /* Respect user motion preferences */
 @media (prefers-reduced-motion: reduce) {
   *, ::before, ::after {

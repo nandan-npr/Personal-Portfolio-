@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ProjectItem, ProjectCategory } from '../types';
 import { PROJECTS } from '../data/portfolioData';
+import { usePortfolio } from '../hooks/usePortfolio';
 import { ArrowUpRight, ArrowRight, Layers, Sparkles, BarChart2 } from 'lucide-react';
 
 interface WorkViewProps {
@@ -8,11 +9,13 @@ interface WorkViewProps {
 }
 
 export const WorkView: React.FC<WorkViewProps> = ({ onSelectProject }) => {
+  const { projects } = usePortfolio();
+  const allProjects = projects && projects.length > 0 ? projects : PROJECTS;
   const [filter, setFilter] = useState<ProjectCategory>('all');
 
   const filteredProjects = filter === 'all'
-    ? PROJECTS
-    : PROJECTS.filter((p) => p.category === filter);
+    ? allProjects
+    : allProjects.filter((p) => p.category === filter);
 
   return (
     <div className="w-full pt-28 pb-28">
@@ -41,7 +44,7 @@ export const WorkView: React.FC<WorkViewProps> = ({ onSelectProject }) => {
               filter === 'all' ? 'text-[#111111] font-semibold' : 'text-neutral-400 hover:text-[#111111]'
             }`}
           >
-            <span>ALL PROJECTS ({PROJECTS.length})</span>
+            <span>ALL PROJECTS ({allProjects.length})</span>
             {filter === 'all' && (
               <span className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-[#B89047]" />
             )}
@@ -53,7 +56,7 @@ export const WorkView: React.FC<WorkViewProps> = ({ onSelectProject }) => {
               filter === 'fullstack' ? 'text-[#111111] font-semibold' : 'text-neutral-400 hover:text-[#111111]'
             }`}
           >
-            <span>FULL-STACK WEB (2)</span>
+            <span>FULL-STACK WEB ({allProjects.filter((p) => p.category === 'fullstack').length})</span>
             {filter === 'fullstack' && (
               <span className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-[#B89047]" />
             )}
@@ -65,7 +68,7 @@ export const WorkView: React.FC<WorkViewProps> = ({ onSelectProject }) => {
               filter === 'ai-backend' ? 'text-[#111111] font-semibold' : 'text-neutral-400 hover:text-[#111111]'
             }`}
           >
-            <span>AI & SYSTEMS (1)</span>
+            <span>AI & SYSTEMS ({allProjects.filter((p) => p.category === 'ai-backend').length})</span>
             {filter === 'ai-backend' && (
               <span className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-[#B89047]" />
             )}
@@ -77,7 +80,7 @@ export const WorkView: React.FC<WorkViewProps> = ({ onSelectProject }) => {
               filter === 'data-bi' ? 'text-[#111111] font-semibold' : 'text-neutral-400 hover:text-[#111111]'
             }`}
           >
-            <span>DATA & BI (2)</span>
+            <span>DATA & BI ({allProjects.filter((p) => p.category === 'data-bi').length})</span>
             {filter === 'data-bi' && (
               <span className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-[#B89047]" />
             )}

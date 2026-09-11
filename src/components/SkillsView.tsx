@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { SKILL_CATEGORIES } from '../data/portfolioData';
+import { usePortfolio } from '../hooks/usePortfolio';
 import { Check, Info } from 'lucide-react';
 import { PageView } from '../types';
 
@@ -8,6 +9,8 @@ interface SkillsViewProps {
 }
 
 export const SkillsView: React.FC<SkillsViewProps> = ({ onNavigate }) => {
+  const { skillCategories } = usePortfolio();
+  const categories = skillCategories && skillCategories.length > 0 ? skillCategories : SKILL_CATEGORIES;
   const [activeCategory, setActiveCategory] = useState<string>('all');
   const [activeSkillEvidence, setActiveSkillEvidence] = useState<{
     name: string;
@@ -16,8 +19,8 @@ export const SkillsView: React.FC<SkillsViewProps> = ({ onNavigate }) => {
   } | null>(null);
 
   const displayedCategories = activeCategory === 'all'
-    ? SKILL_CATEGORIES
-    : SKILL_CATEGORIES.filter((c) => c.id === activeCategory);
+    ? categories
+    : categories.filter((c) => c.id === activeCategory);
 
   return (
     <div className="w-full pt-28 pb-28">
@@ -43,12 +46,12 @@ export const SkillsView: React.FC<SkillsViewProps> = ({ onNavigate }) => {
               activeCategory === 'all' ? 'text-[#111111] font-semibold' : 'text-neutral-400 hover:text-[#111111]'
             }`}
           >
-            <span>ALL DISCIPLINES ({SKILL_CATEGORIES.length})</span>
+            <span>ALL DISCIPLINES ({categories.length})</span>
             {activeCategory === 'all' && (
               <span className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-[#B89047]" />
             )}
           </button>
-          {SKILL_CATEGORIES.map((cat) => (
+          {categories.map((cat) => (
             <button
               key={cat.id}
               onClick={() => setActiveCategory(cat.id)}

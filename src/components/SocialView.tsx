@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import { PERSONAL_INFO } from '../data/portfolioData';
 import { ArrowUpRight, Copy, Check, Mail, Phone, Linkedin, Github } from 'lucide-react';
 import { PageView } from '../types';
-import { copyTextToClipboard, triggerMailto } from '../utils/contactUtils';
+import { copyTextToClipboard } from '../utils/contactUtils';
 
 interface SocialViewProps {
   onNavigate: (view: PageView) => void;
+  onOpenContact?: () => void;
 }
 
-export const SocialView: React.FC<SocialViewProps> = ({ onNavigate }) => {
+export const SocialView: React.FC<SocialViewProps> = ({ onNavigate, onOpenContact }) => {
   const [copiedEmail, setCopiedEmail] = useState(false);
   const [copiedPhone, setCopiedPhone] = useState(false);
 
@@ -137,15 +138,15 @@ export const SocialView: React.FC<SocialViewProps> = ({ onNavigate }) => {
                   <span>{copiedEmail ? 'EMAIL COPIED' : 'COPY EMAIL'}</span>
                 </button>
 
-                <a
+                <button
                   id="social-send-email-btn"
-                  href={`mailto:${PERSONAL_INFO.email}`}
-                  onClick={() => triggerMailto(PERSONAL_INFO.email, 'Engineering Opportunity')}
-                  className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-mono tracking-wider uppercase bg-[#111111] text-white hover:bg-[#B89047] transition-colors"
+                  type="button"
+                  onClick={onOpenContact || (() => onNavigate('contact'))}
+                  className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-mono tracking-wider uppercase bg-[#111111] text-white hover:bg-[#B89047] transition-colors cursor-pointer"
                 >
                   <Mail className="w-3.5 h-3.5" />
                   <span>EMAIL ME</span>
-                </a>
+                </button>
               </div>
             </div>
             <p className="text-xs text-neutral-400 font-mono mt-4 pt-4 border-t border-neutral-100">

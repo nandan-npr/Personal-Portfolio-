@@ -1,14 +1,23 @@
 import React from 'react';
 import { EXPERIENCES } from '../data/portfolioData';
+import { usePortfolio } from '../hooks/usePortfolio';
 import { ArrowUpRight, CheckCircle2 } from 'lucide-react';
 import { PageView } from '../types';
 
 interface ExperienceViewProps {
   onNavigate: (view: PageView) => void;
   onOpenResume: () => void;
+  onOpenContact?: () => void;
 }
 
-export const ExperienceView: React.FC<ExperienceViewProps> = ({ onNavigate, onOpenResume }) => {
+export const ExperienceView: React.FC<ExperienceViewProps> = ({
+  onNavigate,
+  onOpenResume,
+  onOpenContact,
+}) => {
+  const { experiences } = usePortfolio();
+  const expList = experiences && experiences.length > 0 ? experiences : EXPERIENCES;
+
   return (
     <div className="w-full pt-28 pb-28">
       <div className="max-w-5xl mx-auto px-6 sm:px-8 lg:px-12">
@@ -27,7 +36,7 @@ export const ExperienceView: React.FC<ExperienceViewProps> = ({ onNavigate, onOp
 
         {/* Sophisticated Editorial Timeline */}
         <div className="space-y-24">
-          {EXPERIENCES.map((exp, index) => {
+          {expList.map((exp, index) => {
             const expNumber = index + 1 < 10 ? `0${index + 1}` : `${index + 1}`;
             return (
               <div
@@ -128,8 +137,8 @@ export const ExperienceView: React.FC<ExperienceViewProps> = ({ onNavigate, onOp
               DOWNLOAD RESUME
             </button>
             <button
-              onClick={() => onNavigate('contact')}
-              className="px-5 py-2.5 text-xs font-semibold tracking-[0.18em] uppercase bg-[#111111] text-white hover:bg-[#B89047] transition-all"
+              onClick={onOpenContact || (() => onNavigate('contact'))}
+              className="px-5 py-2.5 text-xs font-semibold tracking-[0.18em] uppercase bg-[#111111] text-white hover:bg-[#B89047] transition-all cursor-pointer"
             >
               LET'S TALK
             </button>
